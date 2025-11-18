@@ -3,8 +3,18 @@ include ../util.mk
 HOST_ENV := $(shell uname 2>/dev/null || echo Unknown)
 HOST_ENV := $(patsubst MINGW%,MinGW,$(HOST_ENV))
 
+# Returns the path to the command $(1) if exists. Otherwise returns an empty string.
+find-command = $(shell which $(1) 2>/dev/null)
+ifneq ($(call find-command,gcc),)
+CC           := gcc
+CXX          := gcc++
+else ifneq ($(call find-command,clang),)
 CC           := clang
 CXX          := clang++
+else
+$(error no suitable C and C++ compiler found)
+endif
+
 CFLAGS       := -I. -Iinclude -Wall -Wextra -Wno-unused-parameter -pedantic -O3 -march=native -mtune=native -s -g
 LDFLAGS      := -lm -lstdc++
 ALL_PROGRAMS := textconv aifc_decode aiff_extract_codebook tabledesign extract_data_for_mio skyconv makextfiles compress_mario_anims psx_sample_gen convert_image_psx n64graphics mio0
