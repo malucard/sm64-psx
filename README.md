@@ -58,9 +58,9 @@ The disc image will be located at `build/<VERSION>_psx/sm64.<VERSION>.iso`. The 
 
 1. Install and update MSYS2, following all the directions listed on https://www.msys2.org/.
 2. From the start menu, launch MSYS2 MinGW and install required packages depending on your machine (do **NOT** launch "MSYS2 MSYS"):
-  * 64-bit: Launch "MSYS2 MinGW 64-bit" and install: `pacman -S git make python3 mingw-w64-x86_64-gcc`
-  * 32-bit (will also work on 64-bit machines): Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc`
-  * Do **NOT** by mistake install the package called simply `gcc`.
+  * 64-bit: Launch "MSYS2 MinGW 64-bit" and install: `pacman -S git make python3 mingw-w64-x86_64-gcc mingw-w64-x86_64-meson`
+  * 32-bit (will also work on 64-bit machines): Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc mingw-w64-i686-meson`
+  * Do **NOT** by mistake install the packages called simply `gcc` and `meson`.
 3. Build and install the mipsel-none-elf-gcc toolchain.
 4. The MSYS2 terminal has a _current working directory_ that initially is `C:\msys64\home\<username>` (home directory). At the prompt, you will see the current working directory in yellow. `~` is an alias for the home directory. You can change the current working directory to `My Documents` by entering `cd /c/Users/<username>/Documents`.
 5. Clone the repo: `git clone https://github.com/malucard/sm64-psx.git`, which will create a directory `sm64-psx` and then **enter** it `cd sm64-psx`.

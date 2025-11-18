@@ -84,16 +84,6 @@ TOOLS_DIR := tools
 
 PYTHON := python3
 
-# psxavenc currently does not compile!
-PSXAVENC := ./psxavenc
-
-#PSXAVENC := $(BUILD_DIR_BASE)/psxavenc/build/psxavenc
-#$(PSXAVENC):
-#>	$(V)mkdir -p $(BUILD_DIR_BASE)
-#>	$(V)git clone https://github.com/WonderfulToolchain/psxavenc $(BUILD_DIR_BASE)/psxavenc || true
-#>	$(V)cd $(BUILD_DIR_BASE)/psxavenc && meson setup build
-#>	$(V)cd $(BUILD_DIR_BASE)/psxavenc && meson compile -C build
-
 ifeq ($(filter clean distclean print-%,$(MAKECMDGOALS)),)
 	# Make sure assets exist
 	NOEXTRACT ?= 0
@@ -120,3 +110,6 @@ else ifeq ($(PC),1)
 else
 	include Makefile.psx.mk
 endif
+
+PSXAVENC := tools/psxavenc/build/psxavenc
+MKPSXISO := tools/mkpsxiso

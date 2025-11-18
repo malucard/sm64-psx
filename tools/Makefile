@@ -78,7 +78,28 @@ skyconv_SOURCES := skyconv.c n64graphics.c utils.c
 #  armips_LDFLAGS += -municode
 #endif
 
-all-except-recomp: $(LIBAUDIOFILE) $(BUILD_PROGRAMS)
+# upstream psxavenc currently does not compile! need to build a fork
+psxavenc/build/psxavenc:
+	$(V)rm -rf psxavenc
+	$(V)git clone -j8 https://github.com/malucard/psxavenc
+	$(V)cd psxavenc && meson setup build
+	$(V)cd psxavenc && meson compile -C build
+
+ifeq ($(HOST_ENV),MinGW)
+mkpsxiso:
+	$(V)wget -q https://github.com/Lameguy64/mkpsxiso/releases/download/v2.10/mkpsxiso-2.10-win64.zip
+	$(V)unzip mkpsxiso-2.10-win64.zip
+	$(V)mv mkpsxiso-2.10-win64/bin/mkpsxiso.exe ./mkpsxiso
+	$(V)rm -rf mkpsxiso-2.10-win64 mkpsxiso-2.10-win64.zip
+else
+mkpsxiso:
+	$(V)wget -q https://github.com/Lameguy64/mkpsxiso/releases/download/v2.10/mkpsxiso-2.10-Linux.zip
+	$(V)unzip mkpsxiso-2.10-Linux.zip
+	$(V)mv mkpsxiso-2.10-Linux/bin/mkpsxiso ./mkpsxiso
+	$(V)rm -rf mkpsxiso-2.10-Linux mkpsxiso-2.10-Linux.zip
+endif
+
+all-except-recomp: $(LIBAUDIOFILE) $(BUILD_PROGRAMS) psxavenc/build/psxavenc mkpsxiso
 
 all: all-except-recomp ido5.3_recomp
 

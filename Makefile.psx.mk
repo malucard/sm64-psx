@@ -315,13 +315,19 @@ $(ALL_TEX_HEADER_FILES):
 
 # background music
 BGM_TRACKS := 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37
-$(BUILD_DIR)/bgm/%.track.xa: .local/%.wav $(PSXAVENC)
->	$(V)mkdir -p $(dir $@)
->	$(V)$(PSXAVENC) -t xa -f 37800 -b 8 -c 2 -F $(*:track=) -C 0 $< $@
 
 ifeq ($(wildcard .local/0.wav),)
 	$(warning music not found!)
+	BGM_TRACKS := $(foreach track,$(BGM_TRACKS),dummy$(track))
 endif
+
+$(BUILD_DIR)/bgm/dummy%.track.xa: empty.wav $(PSXAVENC)
+>	$(V)mkdir -p $(dir $@)
+>	$(V)$(PSXAVENC) -t xa -f 37800 -b 8 -c 2 -F $(*:track=) -C 0 $< $@
+
+$(BUILD_DIR)/bgm/%.track.xa: .local/%.wav $(PSXAVENC)
+>	$(V)mkdir -p $(dir $@)
+>	$(V)$(PSXAVENC) -t xa -f 37800 -b 8 -c 2 -F $(*:track=) -C 0 $< $@
 
 $(BUILD_DIR)/bgm/pack.xa: $(TOOLS_DIR)/interleave_xa.py $(foreach track,$(BGM_TRACKS),$(BUILD_DIR)/bgm/$(track).track.xa)
 >	$(V)mkdir -p $(dir $@)
@@ -611,7 +617,7 @@ $(BUILD_DIR)/psx_iso.xml: psx_iso.xml
 
 $(ISO_OUT): $(EXE) $(BUILD_DIR)/bgm/pack.xa $(BUILD_DIR)/psx_iso.xml system.cnf
 >	@$(PRINT) "$(GREEN)Making iso file: $(BLUE)$@ $(NO_COL)\n"
->	$(V)cd $(BUILD_DIR) && ../../mkpsxiso -y ./psx_iso.xml
+>	$(V)cd $(BUILD_DIR) && ../../$(MKPSXISO) -y ./psx_iso.xml
 
 NOPS ?= nops
 
