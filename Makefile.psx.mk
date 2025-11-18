@@ -186,7 +186,7 @@ endif
 ASFLAGS := -O2 -march=r3000 -mabi=eabi -msoft-float $(foreach i,$(INCLUDE_DIRS),-I$(i)) $(foreach d,$(DEFINES),--defsym $(d))
 LDFLAGS := $(CFLAGS) -EL -Wl,-Map,$(BUILD_DIR)/sm64.map -Lps1-bare-metal -T$(BUILD_DIR)/executable.preprocessed.ld
 
-CPP      := cpp
+CPP      := $(CC) -E -x c
 CPPFLAGS := -P -Wno-trigraphs $(DEF_INC_CFLAGS)
 
 #==============================================================================#
