@@ -295,10 +295,15 @@ $(PNGS_WITH_BLACK_TRANSPARENCY:%.png=$(BUILD_DIR)/%.fulldata): $(BUILD_DIR)/%.fu
 >	$(V)./tools/convert_image_psx 4 $< $@
 
 ALL_PNGS := $(foreach png,$(filter-out %/cake.png %/cake_eu.png %/skyboxes/%.png,$(filter %.png,$(file <.assets-local.txt))),$(wildcard $(png))) dualshock_graphic.png
+ALL_FULLDATAS := $(ALL_PNGS:%.png=$(BUILD_DIR)/%.fulldata)
 
-$(BUILD_DIR)/tex_pack: $(ALL_PNGS:%.png=$(BUILD_DIR)/%.fulldata) tools/pack_textures.py
+$(BUILD_DIR)/tex_pack: $(ALL_FULLDATAS) tools/pack_textures.py
 >	@$(PRINT) "$(GREEN)Packing all images$(NO_COL)\n"
->	$(V)$(PYTHON) tools/pack_textures.py $@.tmp $(filter-out tools/pack_textures.py,$^)
+>	$(V)rm -f $(BUILD_DIR)/fulldata_list.txt
+>	$(V)for fulldata in $(ALL_FULLDATAS); do \
+>		echo $$fulldata >> $(BUILD_DIR)/fulldata_list.txt ;\
+>	done
+>	$(V)$(PYTHON) tools/pack_textures.py $@.tmp $(BUILD_DIR)/fulldata_list.txt
 >	$(V)for png in $(ALL_PNGS); do \
 >		hexdump -v -e '1/1 "0x%X,"' $(BUILD_DIR)/$${png%.png}.texheader > $(BUILD_DIR)/$${png%.png}.inc.c ;\
 >	done
@@ -453,10 +458,10 @@ $(BUILD_DIR)/ext_files_sections_noscriptgeo.txt: $(BIN_SEG_FILES:%.elf=%.mio0sec
 >	@cat $^ > $@
 $(BUILD_DIR)/ext_files_sections_plusmenu.txt: $(BUILD_DIR)/ext_files_sections_noscriptgeo.txt $(BUILD_DIR)/levels/menu.levelscriptgeosection.txt
 >	@cat $^ > $@
-$(BUILD_DIR)/%.marioanimbin: $(BUILD_DIR)/%.elf $(TOOLS_DIR)/compress_mario_anims
+$(BUILD_DIR)/mario_anim_data.marioanimbin: $(BUILD_DIR)/mario_anim_data.elf $(TOOLS_DIR)/compress_mario_anims
 >	@data_offset_and_size=`readelf -S $< | sed -Enz "s?.*\\.data\\s+PROGBITS\\s+[0-9A-Za-z]+\\s+([0-9A-Za-z]+)\\s+([0-9A-Za-z]+).*?0x\1 0x\2?p"` ;\
 >	exec $(TOOLS_DIR)/compress_mario_anims $< $@ $$data_offset_and_size
-$(BUILD_DIR)/%.marioanimsection.txt: $(BUILD_DIR)/%.marioanimbin
+$(BUILD_DIR)/mario_anim_data.marioanimsection.txt: $(BUILD_DIR)/mario_anim_data.marioanimbin
 >	@echo -n "$^:0:`printf "%x" \`du -sb $^ | cut -f 1\``!_$(basename $(basename $(notdir $^)))SegmentRomStart:_$(basename $(basename $(notdir $^)))SegmentRomEnd " > $@
 
 HARDCODED_SEGMENTS := -Wl,--defsym=_goddardSegmentRomStart=0 -Wl,--defsym=_goddardSegmentRomEnd=0 -Wl,--defsym=_goddardSegmentStart=0 -Wl,--defsym=_scriptsSegmentRomStart=0 -Wl,--defsym=_scriptsSegmentRomEnd=0 -Wl,--defsym=_behaviorSegmentRomStart=0 -Wl,--defsym=_behaviorSegmentRomEnd=0

@@ -1,9 +1,12 @@
 import sys
 
+with open(sys.argv[2], "r") as list_file:
+	in_file_list = list_file.read().splitlines()
+
 queued_headers = []
 out_pixel_archive_bytes = bytearray()
 cur_pos = 0
-for in_path in sys.argv[2:]:
+for in_path in in_file_list:
 	assert in_path.endswith(".fulldata")
 	with open(in_path, "rb") as in_file:
 		contents = in_file.read()
