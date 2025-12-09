@@ -285,7 +285,7 @@ void mtx_billboard(ShortMatrix* dest, ShortMatrix* mtx, Vec3s position, s16 angl
     dest->m[2][2] = 1;
 
     dest->t[0] = qtrunc(mtx->m[0][0] * position[0] + mtx->m[0][1] * position[1] + mtx->m[0][2] * position[2]) + mtx->t[0];
-    dest->t[1] = qtrunc(mtx->m[1][0] * position[0] - mtx->m[1][1] * position[1] + mtx->m[1][2] * position[2]) + mtx->t[1];
+    dest->t[1] = qtrunc(mtx->m[1][0] * position[0] + mtx->m[1][1] * position[1] + mtx->m[1][2] * position[2]) + mtx->t[1];
     dest->t[2] = qtrunc(mtx->m[2][0] * position[0] + mtx->m[2][1] * position[1] + mtx->m[2][2] * position[2]) + mtx->t[2];
 }
 
