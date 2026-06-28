@@ -21,9 +21,9 @@ An original copy of the game is required to extract the assets.
 - Mario's animations are compressed (from 580632 to 190324 bytes) and placed in a corner of VRAM rather than being loaded from storage (we don't have the luxury of a fast cartridge to read from in the middle of a frame)
 - Custom profiler
 - Custom texture encoder that quantizes all textures to 4 bits per pixel
-- Translucent circle-texture shadows replaced with subtractive hexagonal shadows, as the PSX doesn't support arbitrary translucency
-- (TODO) Camera system adapted to rotate with the right analog stick
-- (TODO) Simplified rewritten Goddard subsystem
+- Translucent texture shadows replaced with subtractive hexagonal shadows, as the PSX doesn't support arbitrary translucency
+- (WIP) Camera system adapted to rotate with the right analog stick
+- (WIP) Simplified rewritten Goddard subsystem
 
 ## Known issues
 
@@ -33,7 +33,7 @@ An original copy of the game is required to extract the assets.
 - The camera cannot be controlled in many levels due to the unfinished camera control implementation
 - Crashes when entering certain levels (due to insufficient memory?)
 - Ending sequence crashes on load
-- When reaching the bridge in the castle grounds, Mario looks up but Lakitu never comes over
+- When reaching the bridge in the castle grounds, Mario looks up but Lakitu never comes over (you need to do the Lakitu skip)
 - Poles do not go down when pounded
 - Textures are loaded individually, causing long stutters and loading times
 - Stretched textures due to PSX limitations (the graphics preprocessor could help)

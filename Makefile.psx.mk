@@ -183,7 +183,7 @@ ifneq ($(CFLAGS),$(file <$(CFLAGS_FILE)))
 	$(file >$(CFLAGS_FILE),$(CFLAGS))
 endif
 
-ASFLAGS := -O2 -march=r3000 -mabi=eabi -msoft-float $(foreach i,$(INCLUDE_DIRS),-I$(i)) $(foreach d,$(DEFINES),--defsym $(d))
+ASFLAGS := -O2 -march=r3000 -msoft-float
 LDFLAGS := $(CFLAGS) -EL -Wl,-Map,$(BUILD_DIR)/sm64.map -Lps1-bare-metal -T$(BUILD_DIR)/executable.preprocessed.ld
 
 CPP      := $(CC) -E -x c
